@@ -49,13 +49,13 @@ module Fluent
                 "status" => r.status,
                 "type" => r.type,
             }
-            _container = Thread.new{ results = Docker::Container.get(r.id) }.value
+            _container = Docker::Container.get(r.id)
             if _container
                 record["container"] = {
                     "state" => _container.info["State"],
                     "name" => _container.info["Name"].gsub(/^\//, ''),
                 }
-                _image = Thread.new{ results = Docker::Image.get(_container.info["Image"]) }.value
+                _image = Docker::Image.get(_container.info["Image"])
                 if _image
                     record["container"]["image"] = _image.info["RepoTags"]
                 end
